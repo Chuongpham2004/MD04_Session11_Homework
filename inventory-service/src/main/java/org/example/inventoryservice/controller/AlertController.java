@@ -1,7 +1,7 @@
 package org.example.inventoryservice.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.inventoryservice.dto.AlertMessage;
+import org.example.inventoryservice.dto.res.AlertMessage;
 import org.example.inventoryservice.service.RedisMessagePublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

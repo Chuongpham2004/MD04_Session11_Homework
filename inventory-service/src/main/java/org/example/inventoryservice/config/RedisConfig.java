@@ -1,6 +1,7 @@
 package org.example.inventoryservice.config;
 
 import org.example.inventoryservice.service.RedisMessageSubscriber;
+import org.example.inventoryservice.service.ShippingAlertSubscriber;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -47,19 +48,36 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisMessageListenerContainer redisContainer(
-            RedisConnectionFactory connectionFactory,
-            MessageListenerAdapter listenerAdapter,
-            ChannelTopic alertTopic) {
-        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
-        container.setConnectionFactory(connectionFactory);
-        // Đăng ký subscriber lắng nghe channel "pharmacy-alerts"
-        container.addMessageListener(listenerAdapter, alertTopic);
-        return container;
+    public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory connectionFactory) {
+        return new StringRedisTemplate(connectionFactory);
+    }
+
+
+    @Bean
+    public ChannelTopic shippingTopic() {
+        return new ChannelTopic("shipping-alerts");
     }
 
     @Bean
-    public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory connectionFactory) {
-        return new StringRedisTemplate(connectionFactory);
+    public MessageListenerAdapter shippingListenerAdapter(ShippingAlertSubscriber subscriber) {
+        return new MessageListenerAdapter(subscriber);
+    }
+
+    @Bean
+    public RedisMessageListenerContainer redisContainer(
+            RedisConnectionFactory connectionFactory,
+            MessageListenerAdapter listenerAdapter,         // dành cho alertTopic cũ
+            ChannelTopic alertTopic,                        // channel cũ
+            MessageListenerAdapter shippingListenerAdapter, // dành cho vận chuyển
+            ChannelTopic shippingTopic) {                   // shipping-alerts
+
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+
+        // Lắng nghe cả 2 channel
+        container.addMessageListener(listenerAdapter, alertTopic);
+        container.addMessageListener(shippingListenerAdapter, shippingTopic);
+
+        return container;
     }
 }

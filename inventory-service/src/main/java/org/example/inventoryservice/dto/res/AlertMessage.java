@@ -1,4 +1,4 @@
-package org.example.inventoryservice.dto;
+package org.example.inventoryservice.dto.res;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -2,7 +2,7 @@ package org.example.inventoryservice.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.example.inventoryservice.dto.AlertMessage;
+import org.example.inventoryservice.dto.res.AlertMessage;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.stereotype.Service;
