@@ -1,0 +1,43 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: inventory-service
+  cache:
+    type: redis
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: rikkeiacademy
+      timeout: 60000ms
+
+    # --- CẤU HÌNH SPRING SESSION REDIS ---
+  session:
+    store-type: redis
+    redis:
+      namespace: "rikkei:pharmacy:session"
+      save-mode: always
+    timeout: 30m
+  datasource:
+    url: jdbc:postgresql://localhost:5432/pharmacy_db
+    username: postgres
+    password: 200426
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
